@@ -16,18 +16,18 @@ help: Makefile
 build:
 	./build.sh ${name} ${dockerfile}
 
-## deploy: deploy stack: make deploy name=my-app
-.PHONY: deploy
-deploy:
+## infra: deploy infrastructure only: make infra name=my-app
+.PHONY: infra
+infra:
 	sam deploy \
 		--template-file stack.yml \
 		--stack-name ${name} \
 		--resolve-s3 \
 		--capabilities CAPABILITY_IAM
 
-## buildanddeploy: build image and deploy it: make buildanddeploy name=my-app dockerfile=../
-.PHONY: buildanddeploy
-buildanddeploy: build
+## infra-app: deploy infrastructure and build/deploy app: make infra-app name=my-app dockerfile=../
+.PHONY: infra-app
+infra-app: build
 	sam deploy \
 		--template-file stack.yml \
 		--stack-name ${name} \
@@ -35,8 +35,9 @@ buildanddeploy: build
 		--resolve-s3 \
 		--capabilities CAPABILITY_IAM
 
-## delete: delete stack: make delete name=my-app
+## delete: delete entire stack: make delete name=my-app
 .PHONY: delete 
 delete:
 	sam delete --stack-name ${name}; \
 	aws ecr delete-repository --force --repository-name ${name}
+

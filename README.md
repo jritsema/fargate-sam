@@ -13,10 +13,10 @@ Requires the [AWS SAM CLI](https://docs.aws.amazon.com/serverless-application-mo
 ```
  Choose a make command to run
 
-  build            create ecr repo and build/push image   make build name=my-app dockerfile=../
-  deploy           deploy stack                           make deploy name=my-app
-  buildanddeploy   build image and deploy it              make buildanddeploy name=my-app dockerfile=../
-  delete           delete stack                           make delete name=my-app
+  build       create ecr repo and build/push image         make build name=my-app dockerfile=../
+  infra       deploy infrastructure only                   make infra name=my-app
+  infra-app   deploy infrastructure and build/deploy app   make infra-app name=my-app dockerfile=../
+  delete      delete entire stack                          make delete name=my-app
 ```
 
 You can set your app specific parameters in the [stack.yml](./stack.yml) file. For example:
@@ -32,14 +32,15 @@ HealthCheckPath: /health
 ImageUrl: public.ecr.aws/aws-containers/proton-demo-image:2d7f777
 ```
 
-If you want to build local code into an image and deploy it, you can use the following command, specifying the name and the releative location of your Dockerfile.
+If you want to provision cloud resources, build local code into an image, and deploy it using a single command, you can use the following, specifying the name and the releative location of your Dockerfile.
 
 ```sh
-make buildanddeploy name=my-app dockerfile=../
+make infra-app name=my-app dockerfile=../
 ```
 
-If you want to only use CloudFormation to provision the initial set of cloud resources and use another tool to build and deploy your container image on top, you can run the following which will deploy a tiny default backend image that only responds to health checks.
+If you want to only provision the cloud resources and use another tool to build and deploy your container image on top, you can run the following which will deploy a tiny default backend image that only responds to health checks.
 
 ```sh
-make deploy name=my-app
+make infra name=my-app
 ```
+
